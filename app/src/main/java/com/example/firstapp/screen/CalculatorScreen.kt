@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.firstapp.model.CalculatorButtonData
 import com.example.firstapp.CalculatorButtonType
 import com.example.firstapp.ui.theme.FirstAPPTheme
@@ -61,23 +63,26 @@ val buttons = listOf(
 
 @Composable
 fun CalculatorScreen(modifier: Modifier = Modifier, viewModel: CalculatorViewModel){
+
+    val inputText = viewModel.inputText.observeAsState()
+    val result = viewModel.result.observeAsState()
+
     Box(modifier = modifier){
         Column(
             modifier = modifier.fillMaxSize(),
             horizontalAlignment = Alignment.End
         ){
-            TextField(
-                value = "123+123",
-                textStyle = TextStyle(
+            Text(
+                text = inputText.value?:"",
+                style = TextStyle(
                     fontSize = 32.sp,
                     textAlign = TextAlign.End
                 ),
-                onValueChange = {/*newText -> input = newText */},
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "246",
+                text = result.value?:"",
                 style = TextStyle(
                     fontSize = 64.sp,
                     textAlign = TextAlign.End
